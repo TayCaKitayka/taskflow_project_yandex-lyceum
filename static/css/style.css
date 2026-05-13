@@ -1,0 +1,11 @@
+body {
+    background-color: #f7f8fa;
+}
+
+.card {
+    border-radius: 14px;
+}
+
+.status-badge {
+    background-color: #0d6efd;
+}

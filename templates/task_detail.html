@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-start mb-4">
+    <div>
+        <h1>{{ task.title }}</h1>
+        <p class="text-muted">
+            Проект:
+            <a href="{{ url_for('projects.project_detail', project_id=task.project.id) }}">
+                {{ task.project.title }}
+            </a>
+        </p>
+    </div>
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-secondary" href="{{ url_for('tasks.edit_task', task_id=task.id) }}">Изменить</a>
+        <form method="post" action="{{ url_for('tasks.delete_task', task_id=task.id) }}">
+            <button class="btn btn-outline-danger" type="submit">Удалить</button>
+        </form>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <p>{{ task.description or "Описание отсутствует." }}</p>
+        <p>
+            <strong>Статус:</strong> {{ task.status }}<br>
+            <strong>Приоритет:</strong> {{ task.priority }}<br>
+            <strong>Дедлайн:</strong> {{ task.deadline or "Не указан" }}
+        </p>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h2 class="h5">Файлы</h2>
+        {% if task.attachments %}
+            <ul>
+                {% for attachment in task.attachments %}
+                    <li>
+                        <a href="/{{ attachment.file_path }}" target="_blank">
+                            {{ attachment.filename }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-muted">Файлы не загружены.</p>
+        {% endif %}
+
+        <form method="post" enctype="multipart/form-data" action="{{ url_for('files.upload_file', task_id=task.id) }}">
+            <div class="input-group">
+                <input class="form-control" type="file" name="file">
+                <button class="btn btn-primary" type="submit">Загрузить</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<a class="btn btn-outline-secondary" href="{{ url_for('projects.project_detail', project_id=task.project.id) }}">
+    Назад к проекту
+</a>
+{% endblock %}

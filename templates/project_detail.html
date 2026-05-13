@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-start mb-4">
+    <div>
+        <h1>{{ project.title }}</h1>
+        <p class="text-muted">{{ project.description or "Описание отсутствует." }}</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-secondary" href="{{ url_for('projects.edit_project', project_id=project.id) }}">
+            Изменить
+        </a>
+        <form method="post" action="{{ url_for('projects.delete_project', project_id=project.id) }}">
+            <button class="btn btn-outline-danger" type="submit">Удалить</button>
+        </form>
+    </div>
+</div>
+
+<div class="mb-3">
+    <a class="btn btn-primary" href="{{ url_for('tasks.create_task', project_id=project.id) }}">
+        Добавить задачу
+    </a>
+</div>
+
+{% if project.tasks %}
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+            <tr>
+                <th>Название</th>
+                <th>Статус</th>
+                <th>Приоритет</th>
+                <th>Дедлайн</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for task in project.tasks %}
+                <tr>
+                    <td>
+                        <a href="{{ url_for('tasks.task_detail', task_id=task.id) }}">
+                            {{ task.title }}
+                        </a>
+                    </td>
+                    <td>
+                        <span class="badge status-badge">{{ task.status }}</span>
+                    </td>
+                    <td>{{ task.priority }}</td>
+                    <td>{{ task.deadline or "Не указан" }}</td>
+                    <td class="text-end">
+                        {% if task.status != "Готово" %}
+                            <form class="d-inline" method="post" action="{{ url_for('tasks.complete_task', task_id=task.id) }}">
+                                <button class="btn btn-sm btn-outline-success" type="submit">Готово</button>
+                            </form>
+                        {% endif %}
+                        <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('tasks.edit_task', task_id=task.id) }}">
+                            Изменить
+                        </a>
+                        <form class="d-inline" method="post" action="{{ url_for('tasks.delete_task', task_id=task.id) }}">
+                            <button class="btn btn-sm btn-outline-danger" type="submit">Удалить</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="alert alert-info">В проекте пока нет задач.</div>
+{% endif %}
+{% endblock %}

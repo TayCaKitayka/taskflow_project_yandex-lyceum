@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="p-5 bg-light rounded-4 border">
+    <h1 class="display-5 fw-bold">TaskFlow</h1>
+    <p class="lead">
+        Веб-приложение для управления учебными проектами, задачами и файлами.
+    </p>
+    <p>
+        Проект демонстрирует Flask, Bootstrap, SQLAlchemy, авторизацию, загрузку файлов,
+        хранение данных и REST API.
+    </p>
+    {% if current_user.is_authenticated %}
+        <a class="btn btn-primary btn-lg" href="{{ url_for('projects.projects') }}">Открыть проекты</a>
+    {% else %}
+        <a class="btn btn-primary btn-lg" href="{{ url_for('auth.register') }}">Начать работу</a>
+        <a class="btn btn-outline-secondary btn-lg" href="{{ url_for('auth.login') }}">Войти</a>
+    {% endif %}
+</section>
+
+<section class="row mt-4">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5>Проекты</h5>
+                <p>Создание отдельных проектов с описанием и списком задач.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5>Файлы</h5>
+                <p>Загрузка материалов к задачам и хранение ссылок в базе данных.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5>API</h5>
+                <p>Получение проектов и задач в формате JSON через REST endpoints.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
